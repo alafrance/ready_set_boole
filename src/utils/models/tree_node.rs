@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+#[derive(Clone)]
 pub struct TreeNode<T: Display> {
     pub value: T,
     pub left: Option<Box<TreeNode<T>>>,
@@ -17,13 +18,13 @@ impl<T: Display> TreeNode<T> {
     }
 
     // Ajouter un fils gauche à un nœud
-    pub(crate) fn add_left(&mut self, value: T) {
-        self.left = Some(Box::new(TreeNode::new(value)));
+    pub(crate) fn add_left(&mut self, value: TreeNode<T>) {
+        self.left = Some(Box::new(value));
     }
 
     // Ajouter un fils droit à un nœud
-    pub(crate) fn add_right(&mut self, value: T) {
-        self.right = Some(Box::new(TreeNode::new(value)));
+    pub(crate) fn add_right(&mut self, value: TreeNode<T>) {
+        self.right = Some(Box::new(value));
     }
 
     // Méthode pour afficher l'arbre
@@ -37,11 +38,10 @@ impl<T: Display> TreeNode<T> {
         let new_prefix = if is_tail { "    " } else { "|   " };
 
         let children: Vec<&Box<TreeNode<T>>> = self.left.iter().chain(self.right.iter()).collect();
-        if children.is_empty() {
-            return;
-        }
-        for child in children.iter().take(children.len() - 1) {
-            child.print(&format!("{}{}", prefix, new_prefix), false);
+        if !children.is_empty() {
+            for child in children.iter().take(children.len() - 1) {
+                child.print(&format!("{}{}", prefix, new_prefix), false);
+            }
         }
         if let Some(last_child) = children.last() {
             last_child.print(&format!("{}{}", prefix, new_prefix), true);
@@ -56,17 +56,17 @@ mod tests {
     #[test]
     fn test_create_tree() {
         let mut root = TreeNode::new(1);
-        root.add_left(2);
-        root.add_right(3);
+        root.add_left(TreeNode::new(2));
+        root.add_right(TreeNode::new(3));
 
         let left = root.left.as_mut().unwrap();
-        left.add_left(4);
-        left.add_right(5);
+        left.add_left(TreeNode::new(4));
+        left.add_right(TreeNode::new(5));
 
         let right = root.right.as_mut().unwrap();
 
-        right.add_left(6);
-        right.add_right(7);
+        right.add_left(TreeNode::new(6));
+        right.add_right(TreeNode::new(7));
 
         assert_eq!(root.value, 1);
         assert_eq!(root.left.as_ref().unwrap().value, 2);
