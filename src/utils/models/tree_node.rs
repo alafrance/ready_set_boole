@@ -1,6 +1,5 @@
 use std::fmt::Display;
 
-#[derive(Clone)]
 pub struct TreeNode<T: Display> {
     pub value: T,
     pub left: Option<Box<TreeNode<T>>>,
@@ -18,13 +17,13 @@ impl<T: Display> TreeNode<T> {
     }
 
     // Ajouter un fils gauche à un nœud
-    pub(crate) fn add_left(&mut self, value: TreeNode<T>) {
-        self.left = Some(Box::new(value));
+    pub(crate) fn add_left(&mut self, new_value: TreeNode<T>) {
+        self.left = Some(Box::new(new_value));
     }
 
     // Ajouter un fils droit à un nœud
-    pub(crate) fn add_right(&mut self, value: TreeNode<T>) {
-        self.right = Some(Box::new(value));
+    pub(crate) fn add_right(&mut self, new_value: TreeNode<T>) {
+        self.right = Some(Box::new(new_value));
     }
 
     // Méthode pour afficher l'arbre
