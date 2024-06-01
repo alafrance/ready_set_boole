@@ -1,5 +1,5 @@
 mod rpn {
-    use crate::eval_formula::rpn::eval_formula;
+    use crate::ex03_eval_formula::rpn::eval_formula;
 
     pub fn print_truth_table(formula: &str) -> Result<(), String> {
         let variables = extract_variables(formula)?;
@@ -86,7 +86,7 @@ mod rpn {
 
 #[cfg(test)]
 mod tests {
-    use crate::print_truth_table::rpn::print_truth_table;
+    use crate::ex04_print_truth_table::rpn::print_truth_table;
 
     #[test]
     fn test_print_truth_table() {

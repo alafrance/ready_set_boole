@@ -69,7 +69,7 @@ pub(crate) mod rpn {
 
 #[cfg(test)]
 mod tests {
-    use crate::utils_rpn::rpn::{list_operand_bool, list_operand_maj_letter, list_operand_min_letter, to_tree};
+    use crate::utils::utils_rpn::rpn::{list_operand_bool, list_operand_maj_letter, list_operand_min_letter, to_tree};
 
     #[test]
     fn simple_test_tree() {
