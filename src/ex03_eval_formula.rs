@@ -1,16 +1,17 @@
 pub(crate) mod rpn {
+    use crate::utils::char_to_bool::rpn::char_to_bool;
     use crate::utils::TreeNode;
-    use crate::utils::utils_rpn::rpn::{char_to_bool, is_operator, list_operand_bool, to_tree};
+    use crate::utils::rpn_op::rpn::{is_operator, list_operand_bool};
 
     pub fn eval_formula(formula: &str) -> Result<bool, String> {
-        let tree = to_tree(formula, list_operand_bool());
+        let tree = TreeNode::new_formula(formula, list_operand_bool());
         match tree {
             Ok(tree) => calculate_with_tree(tree),
             Err(e) => Err(e)
         }
     }
 
-    fn calculate_with_tree(tree_node: TreeNode<char>) -> Result<bool, String> {
+    fn calculate_with_tree(tree_node: TreeNode) -> Result<bool, String> {
         let operator = tree_node.value;
 
         if operator == '!' {
