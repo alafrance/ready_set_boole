@@ -22,16 +22,21 @@ mod tests {
     }
 
     #[test]
-    fn test_negation_normal_form_morgan_laws() {
-        assert_eq!(negation_normal_form("A&B"), Ok("A&B".to_string()));
-        assert_eq!(negation_normal_form("A|B"), Ok("A|B".to_string()));
-        assert_eq!(negation_normal_form("A&(B|C)"), Ok("A&B|A&C".to_string()));
-        assert_eq!(negation_normal_form("A|(B&C)"), Ok("A|B&A".to_string()));
+    fn test_nothing_changed() {
+        assert_eq!(negation_normal_form("AB&"), Ok("AB&".to_string()));
+        assert_eq!(negation_normal_form("AB|"), Ok("AB|".to_string()));
+        assert_eq!(negation_normal_form("AB|C&"), Ok("AB|C&".to_string()));
     }
 
     #[test]
-    fn test_alexis() {
-        // println!("{:?}", negation_normal_form("AB|C&!"));
-        println!("{:?}", negation_normal_form("AB="));
+    fn test_simple_morgan_laws() {
+        assert_eq!(negation_normal_form("AB="), Ok("A!B|AB!|&".to_string())); // improve it
+        assert_eq!(negation_normal_form("AB>"), Ok("A!B|".to_string()));
+    }
+
+    #[test]
+    fn test_simple_morgan_laws_2() {
+        assert_eq!(negation_normal_form("AB&!"), Ok("A!B!|".to_string()));
+        assert_eq!(negation_normal_form("AB|!"), Ok("A!B!&".to_string()));
     }
 }
