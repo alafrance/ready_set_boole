@@ -42,6 +42,117 @@ impl TreeNode {
             last_child.print(&format!("{}{}", prefix, new_prefix), true);
         }
     }
+
+    pub fn to_nnf_or_cnf(&mut self, apply_cnf: bool) {
+        match self.value {
+            '>' => {
+                let mut new_self = TreeNode::new('|');
+                new_self.add_left(TreeNode::new('!'));
+                new_self.left.as_mut().unwrap().add_left(*self.left.take().unwrap());
+                new_self.add_right(*self.right.take().unwrap());
+                *self = new_self;
+                self.to_nnf_or_cnf(apply_cnf);
+            },
+            '=' => {
+                let self_left = self.left.take().unwrap();
+                let self_right = self.right.take().unwrap();
+                let mut new_self = TreeNode::new('&');
+                new_self.add_left(TreeNode::new('|'));
+                new_self.left.as_mut().unwrap().add_left(TreeNode::new('!'));
+                new_self.left.as_mut().unwrap().left.as_mut().unwrap().add_left(*self_left.clone());
+                new_self.left.as_mut().unwrap().add_right(*self_right.clone());
+                new_self.add_right(TreeNode::new('|'));
+                new_self.right.as_mut().unwrap().add_left(*self_left.clone());
+                new_self.right.as_mut().unwrap().add_right(TreeNode::new('!'));
+                new_self.right.as_mut().unwrap().right.as_mut().unwrap().add_left(*self_right.clone());
+                *self = new_self;
+                self.to_nnf_or_cnf(apply_cnf);
+            },
+            '!' => {
+                if let Some(ref mut left) = self.left {
+                    match left.value {
+                        '!' => {
+                            *self = *left.left.take().unwrap();
+                            self.to_nnf_or_cnf(apply_cnf);
+                        },
+                        '|' => {
+                            let mut new_self = TreeNode::new('&');
+                            new_self.add_left(TreeNode::new('!'));
+                            new_self.left.as_mut().unwrap().add_left(*left.left.take().unwrap());
+                            new_self.add_right(TreeNode::new('!'));
+                            new_self.right.as_mut().unwrap().add_left(*left.right.take().unwrap());
+                            *self = new_self;
+                            self.to_nnf_or_cnf(apply_cnf);
+                        },
+                        '&' => {
+                            let mut new_self = TreeNode::new('|');
+                            new_self.add_left(TreeNode::new('!'));
+                            new_self.left.as_mut().unwrap().add_left(*left.left.take().unwrap());
+                            new_self.add_right(TreeNode::new('!'));
+                            new_self.right.as_mut().unwrap().add_left(*left.right.take().unwrap());
+                            *self = new_self;
+                            self.to_nnf_or_cnf(apply_cnf);
+                        }
+                        _ => left.to_nnf_or_cnf(apply_cnf)
+                    }
+                }
+            },
+            '|' if apply_cnf => {
+                if let Some(ref mut left) = self.left {
+                    if left.value == '&' {
+                        let left_left = left.left.take().unwrap();
+                        let left_right = left.right.take().unwrap();
+                        let right = self.right.take().unwrap();
+
+                        let mut new_self = TreeNode::new('&');
+                        new_self.add_left(TreeNode::new('|'));
+                        new_self.left.as_mut().unwrap().add_left(*left_left);
+                        new_self.left.as_mut().unwrap().add_right(*right.clone());
+
+                        new_self.add_right(TreeNode::new('|'));
+                        new_self.right.as_mut().unwrap().add_left(*left_right);
+                        new_self.right.as_mut().unwrap().add_right(*right);
+
+                        *self = new_self;
+                        self.to_nnf_or_cnf(apply_cnf);
+                        return;
+                    }
+                }
+
+                if let Some(ref mut right) = self.right {
+                    if right.value == '&' {
+                        let right_left = right.left.take().unwrap();
+                        let right_right = right.right.take().unwrap();
+                        let left = self.left.take().unwrap();
+
+                        let mut new_self = TreeNode::new('&');
+                        new_self.add_left(TreeNode::new('|'));
+                        new_self.left.as_mut().unwrap().add_left(*left.clone());
+                        new_self.left.as_mut().unwrap().add_right(*right_left);
+
+                        new_self.add_right(TreeNode::new('|'));
+                        new_self.right.as_mut().unwrap().add_left(*left);
+                        new_self.right.as_mut().unwrap().add_right(*right_right);
+
+                        *self = new_self;
+                        self.to_nnf_or_cnf(apply_cnf);
+                        return;
+                    }
+                }
+
+                // Si aucune règle de distributivité n'a été appliquée, poursuivre avec le match habituel
+                self.to_nnf_or_cnf(apply_cnf);
+            },
+            _ => {
+                if let Some(ref mut left) = self.left {
+                    left.to_nnf_or_cnf(apply_cnf);
+                }
+                if let Some(ref mut right) = self.right {
+                    right.to_nnf_or_cnf(apply_cnf);
+                }
+            },
+        }
+    }
 }
 
 
