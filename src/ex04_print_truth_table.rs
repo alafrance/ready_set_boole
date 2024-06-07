@@ -1,4 +1,4 @@
-mod rpn {
+pub mod rpn {
     use crate::ex03_eval_formula::rpn::eval_formula;
 
     pub fn print_truth_table(formula: &str) -> Result<(), String> {
@@ -31,7 +31,7 @@ mod rpn {
         Ok(())
     }
 
-    fn eval_formula_with_values(formula: &str, variables: &Vec<String>, row: &Vec<bool>) -> Result<bool, String> {
+    pub fn eval_formula_with_values(formula: &str, variables: &Vec<String>, row: &Vec<bool>) -> Result<bool, String> {
         let mut formula = formula.to_string();
         for i in 0..variables.len() {
             formula = formula.replace(&variables[i], if row[i] { "1" } else { "0" });
@@ -50,15 +50,13 @@ mod rpn {
         format!("|{} = |\n|{}---|\n", header, separator)
     }
 
-    fn extract_variables(expression: &str) -> Result<Vec<String>, String> {
+    pub fn extract_variables(expression: &str) -> Result<Vec<String>, String> {
         let mut variables = Vec::new();
         for c in expression.chars() {
             if c.is_ascii_uppercase() {
                 let c = c.to_string();
                 if !variables.contains(&c) {
                     variables.push(c.clone());
-                } else {
-                    return Err(format!("Error in formula, variable {} is duplicated", c));
                 }
             }
         }
@@ -68,7 +66,7 @@ mod rpn {
         Ok(variables)
     }
 
-    fn generate_truth_table(n: usize) -> Vec<Vec<bool>> {
+    pub fn generate_truth_table(n: usize) -> Vec<Vec<bool>> {
         let num_rows = 1 << n; // 2^n
         let mut table = Vec::with_capacity(num_rows);
 

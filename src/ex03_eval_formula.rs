@@ -4,11 +4,8 @@ pub(crate) mod rpn {
     use crate::utils::rpn_op::rpn::{is_operator, list_operand_bool};
 
     pub fn eval_formula(formula: &str) -> Result<bool, String> {
-        let tree = TreeNode::new_formula(formula, list_operand_bool());
-        match tree {
-            Ok(tree) => calculate_with_tree(tree),
-            Err(e) => Err(e)
-        }
+        let tree = TreeNode::new_formula(formula, list_operand_bool())?;
+        calculate_with_tree(tree)
     }
 
     fn calculate_with_tree(tree_node: TreeNode) -> Result<bool, String> {

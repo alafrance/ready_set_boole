@@ -5,7 +5,6 @@ mod nnf {
     pub fn negation_normal_form(formula: &str) -> Result<String, String> {
         let tree = TreeNode::new_formula(&formula, list_operand_maj_letter())?;
         let tree = tree.to_nnf();
-
         Ok(tree.to_rpn())
     }
 }
@@ -38,5 +37,6 @@ mod tests {
     fn test_simple_morgan_laws_2() {
         assert_eq!(negation_normal_form("AB&!"), Ok("A!B!|".to_string()));
         assert_eq!(negation_normal_form("AB|!"), Ok("A!B!&".to_string()));
+        assert_eq!(negation_normal_form("AB&!C|"), Ok("A!B!|C|".to_string()));
     }
 }
