@@ -1,4 +1,4 @@
-use crate::ex00_adder::adder;
+use crate::ex00::adder::adder;
 
 pub fn multiplier(a: u32, b: u32) -> u32 {
     let mut factor = a;
@@ -17,7 +17,7 @@ pub fn multiplier(a: u32, b: u32) -> u32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::ex01_multiplier::multiplier;
+    use super::multiplier;
 
     #[test]
     fn test_multiplier_positive_numbers() {

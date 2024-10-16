@@ -1,23 +1,19 @@
-mod set {
+pub fn map(x: u16, y: u16) -> f64 {
+    let mut result: u32 = 0;
+    let x = x as u32;
+    let y = y as u32;
 
-    pub fn map(x: u16, y: u16) -> f64 {
-        let mut result: u32 = 0;
-        let x = x as u32;
-        let y = y as u32;
-        for i in 0..16 {
-            result |= ((x >> i) & 1) << (2 * i);
-            result |= ((y >> i) & 1) << (2 * i + 1);
-        }
-
-        // Le résultat est un entier sans signe, qu'on convertit en flottant
-        result as f64
+    for i in 0..16 {
+        result |= ((x >> i) & 1) << (2 * i);
+        result |= ((y >> i) & 1) << (2 * i + 1);
     }
 
+    result as f64
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::ex10_map::set::map;
+    use super::map;
 
     #[test]
     fn test() {

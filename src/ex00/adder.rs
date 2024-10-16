@@ -8,7 +8,7 @@ pub fn adder(a: u32, b: u32) -> u32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::ex00_adder::adder;
+    use super::adder;
 
     #[test]
     fn test_adder_positive_numbers() {

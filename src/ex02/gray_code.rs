@@ -4,7 +4,7 @@ pub fn gray_code(n: u32)  -> u32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::ex02_gray_code::gray_code;
+    use super::gray_code;
 
     #[test]
     fn test_gray_code_first_numbers() {
