@@ -77,4 +77,15 @@ mod tests {
 
         assert_eq!(eval_formula("1!1&"), Ok(false));
     }
+
+    #[test]
+    fn test_long_formula() {
+        assert_eq!(eval_formula("101010101010&&&&&&&&&&&"), Ok(false));
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_error() {
+        eval_formula("101r").unwrap();
+    }
 }

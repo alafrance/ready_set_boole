@@ -9,3 +9,5 @@ mod ex06_conjunctive_normal_form;
 mod ex07_sat;
 mod ex08_powerset;
 mod ex09_eval_set;
+mod ex10_map;
+mod ex11_reverse_map;
