@@ -23,6 +23,7 @@ impl TreeNode {
 
 
     // Méthode pour afficher l'arbre
+    #[allow(dead_code)]
     pub fn print_tree(&self) {
         self.print("", true);
     }

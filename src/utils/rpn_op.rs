@@ -12,6 +12,7 @@ pub(crate) mod rpn {
         ('A'..='Z').collect()
     }
 
+    #[allow(dead_code)]
     pub fn list_operand_min_letter() -> Vec<char> {
         ('a'..='z').collect()
     }
